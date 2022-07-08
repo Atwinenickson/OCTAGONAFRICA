@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createWebHistory, createRouter } from "vue-router"
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
 import Profile from '../views/Profile.vue'
+import PageNotFound from '../views/PageNotFound.vue'
 
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 
 const routes = [
   {
@@ -21,10 +21,17 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile
-  }
+  },
+  ,
+  {
+    path: '/:catchAll(.*)*',
+    name: "PageNotFound",
+    component: PageNotFound,
+  },
 ]
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHistory(),
   routes
 })
 

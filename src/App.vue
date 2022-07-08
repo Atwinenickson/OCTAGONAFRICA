@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="flex items-center justify-between flex-wrap bg-blue-500 p-6">
+    <nav class="flex items-center justify-between flex-wrap bg-purple-500 p-6">
       <div class="flex items-center flex-shrink-0 text-white mr-6">
         <svg
           class="fill-current h-8 w-8 mr-2"

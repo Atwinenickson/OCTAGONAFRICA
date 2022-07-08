@@ -8,8 +8,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-  purge: {
-    mode:'layers',
-    content:['./public/**/*.html', './src/**/*.vue']
-  },
 }
