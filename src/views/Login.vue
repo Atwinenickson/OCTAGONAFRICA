@@ -1,51 +1,66 @@
 <template>
-  <div class="flex justify-center items-center mt-52">
-    <div class="w-full max-w-xs">
-      <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div class="identity-input mb-4">
+         
+         <div class="mb-10">
+            <div class="flex justify-center">
+                <img 
+                    alt=""
+                    class="h-14 w-14"
+                    src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-Oy7Jl2PYVr4xWvuB0GiB6ybMuK8FdcLnDwuuDuv7oDyYS__U"/>
+            </div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Login to your account
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600 mt-5">
+            Don't have an account yet?  {' '}
+              <router-link
+            to="/signup"
+            class="block ml-4 mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white"
+            >Signup</router-link>
+            </p>
+        </div>
+
+      <form class="mt-8 space-y-6" onSubmit={handleSubmit}>
+           <div class="-space-y-px">
+        <div class="my-5">
           <label
             for="identity"
-            class="block text-gray-700 text-sm font-bold mb-2"
+           class="sr-only"
           >
             Phone Number</label
           >
           <input
             id="identity"
-            class="shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
             type="tel"
             placeholder="Phone"
             aria-describedby="phoneHelp"
             v-model="phone"
           />
-          <span class="text-xs text-red-700" id="phoneHelp"></span>
         </div>
 
-        <div class="password-input mb-6">
+       <div class="my-5">
           <label
             for="identity"
-            class="block text-gray-700 text-sm font-bold mb-2"
+           class="sr-only"
             >Password</label
           >
 
           <input
             aria-describedby="passwordHelp"
             v-model="password"
-
-            class="shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+ class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+            
             id="password"
             type="password"
             placeholder="*******"
           />
-
-          <span class="text-xs text-red-700" id="passwordHelp"></span>
         </div>
-
-        <div class="flex items-center justify-between">
-          <button
-            class="bg-blue-600 hover:bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        </div>
+           <button
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
             type="submit"
           >
-            Sign In
+            Login In
           </button>
           <a
             class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
@@ -53,10 +68,8 @@
           >
             Forgot Password?
           </a>
-        </div>
       </form>
-    </div>
-  </div>
+     <router-view />
 </template>
 
 <script>
