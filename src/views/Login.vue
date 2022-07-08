@@ -7,17 +7,17 @@
             for="identity"
             class="block text-gray-700 text-sm font-bold mb-2"
           >
-            Email</label
+            Phone Number</label
           >
           <input
             id="identity"
             class="shadow appearance-none borderrounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="Email"
-            aria-describedby="emailHelp"
-            v-model="email"
+            type="tel"
+            placeholder="Phone"
+            aria-describedby="phoneHelp"
+            v-model="phone"
           />
-          <span class="text-xs text-red-700" id="emailHelp"></span>
+          <span class="text-xs text-red-700" id="phoneHelp"></span>
         </div>
 
         <div class="password-input mb-6">
@@ -64,7 +64,7 @@ export default {
   name: "Login",
   data() {
     return {
-      email: "",
+      phone: "",
       password: "",
     };
   },
