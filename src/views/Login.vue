@@ -10,7 +10,7 @@
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Login to your account
             </h2>
-            <p class="mt-2 text-center text-sm text-gray-600 mt-5">
+            <p class="mt-2 text-center text-sm text-gray-900 mt-5">
             Don't have an account yet?  {' '}
               <router-link
             to="/signup"
@@ -56,18 +56,31 @@
           />
         </div>
         </div>
+           <div className="flex items-center justify-between ">
+        <div className="flex items-center">
+          <input
+            id="remember-me"
+            name="remember-me"
+            type="checkbox"
+            className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+          />
+          <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+            Remember me
+          </label>
+        </div>
+
+        <div className="text-sm">
+          <a href="#" className="font-medium text-purple-600 hover:text-purple-500">
+            Forgot your password?
+          </a>
+        </div>
+      </div>
            <button
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
             type="submit"
           >
             Login In
           </button>
-          <a
-            class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-            href="#"
-          >
-            Forgot Password?
-          </a>
       </form>
      <router-view />
 </template>
