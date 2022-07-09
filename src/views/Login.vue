@@ -94,7 +94,7 @@ export default {
         const { jwt, user } = res.data
         window.localStorage.setItem('jwt', jwt)
         window.localStorage.setItem('userData', JSON.stringify(user))
-        this.$router.push('/')
+        this.$router.push('/profile')
       } catch (error) {
         console.log('error')
         this.error = true

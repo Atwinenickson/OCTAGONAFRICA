@@ -10,7 +10,7 @@
         </h2>
         <p class="mt-2 text-center text-sm text-gray-900 mt-5">
             Already have an account?
-            <router-link to="/login" class="block ml-4 mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white">
+            <router-link to="/" class="block ml-4 mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white">
                 Login</router-link>
         </p>
     </div>
