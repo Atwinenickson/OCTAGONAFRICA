@@ -1,6 +1,8 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Monolog\Logger;
+ use Monolog\Handler\StreamHandler;
 
 require '../vendor/autoload.php';
 
@@ -46,16 +48,16 @@ $app->get('/users', function (Request $request, Response $response) {
     
     // $this->logger->addInfo("User list");
     $mapper = new UserMapper($this->db);
-    $users = $mapper->getTickets();
+    $users = $mapper->getUsers();
 
     $response->getBody()->write(var_export($users, true));
     return $response;
 });
 
 $app->get('/user/{id}', function (Request $request, Response $response, $args) {
-    $ticket_id = (int)$args['id'];
+    $user_id = (int)$args['id'];
     $mapper = new UserMapper($this->db);
-    $user = $mapper->getTicketById($user_id);
+    $user = $mapper->getUserById($user_id);
 
     $response->getBody()->write(var_export($user, true));
     return $response;
