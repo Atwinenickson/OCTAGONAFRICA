@@ -1,27 +1,43 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Monolog\Logger;
+ use Monolog\Handler\StreamHandler;
 
 
-use \DB as DB;
-// use Psr\Http\Message\ResponseInterface as Response;
-// use Psr\Http\Message\ServerRequestInterface as Request;
-use Selective\BasePath\BasePathMiddleware;
 
-require  '../../vendor/autoload.php';
+namespace App\Application\Controllers;
+
+use classes\UserMapper;
+use PDO;
+use Psr\Log\LoggerInterface;
+
+
+
+require '../vendor/autoload.php';
 
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
 
+$config['db']['host']   = 'localhost';
+$config['db']['user']   = 'user';
+$config['db']['pass']   = 'password';
+$config['db']['dbname'] = 'exampleapp';
+
 $app = new \Slim\App(['settings' => $config]);
 $container = $app->getContainer();
 
-
+$container['logger'] = function($c) {
+    $logger = new \Monolog\Logger('my_logger');
+    $file_handler = new \Monolog\Handler\StreamHandler('../logs/app.log');
+    $logger->pushHandler($file_handler);
+    return $logger;
+};
 
 
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
-    $pdo = new \PDO("sqlite:" .db/phpsqlite.db);
+    $pdo = new PDO('sqlite:/home/atwine/nickson/Work/Vue/octagon/slimbackend/db/users.sqlite3');
     if ($pdo != null)
     echo 'Connected to the SQLite database successfully!';
     else
@@ -30,50 +46,32 @@ $container['db'] = function ($c) {
 };
 
 
+$app->get('/users', function (Request $request, Response $response) {
+    
+    // $this->logger->addInfo("User list");
+    $mapper = new UserMapper($this->db);
+    $users = $mapper->getUsers();
 
-$app->get('/users', function() {
-    $pdo = new PDO('sqlite:/home/atwine/nickson/Work/Vue/octagon/slimbackend/src/db/users.sqlite3');
-    // if ($pdo != null)
-    // echo 'Connected to the SQLite database successfully!';
-    // else
-    // echo 'Whoops, could not connect to the SQLite database!';
-
-    $result = $pdo ->query("SELECT * FROM users");
-    foreach($result as $row)
-    {
-        $data[] = $row;
-        // print $row['phone'] . "\n";
-        // print json_encode($row);
-        // print json_encode($data);
-    }
-    echo json_encode($result);
-   
+    $response->getBody()->write(var_export($users, true));
+    return $response;
 });
 
+$app->get('/user/{id}', function (Request $request, Response $response, $args) {
+    $user_id = (int)$args['id'];
+    $mapper = new UserMapper($this->db);
+    $user = $mapper->getUserById($user_id);
 
-$app->get('/users', function (Request $request, Response $response) {
-    $sql = "SELECT * FROM users";
-   
-    try {
-      $db = new Db();
-      $conn = $db->connect();
-      $stmt = $conn->query($sql);
-      $users = $stmt->fetchAll(PDO::FETCH_OBJ);
-      $db = null;
-     
-      $response->getBody()->write(json_encode($users));
-      return $response
-        ->withHeader('content-type', 'application/json')
-        ->withStatus(200);
-    } catch (PDOException $e) {
-      $error = array(
-        "message" => $e->getMessage()
-      );
-   
-      $response->getBody()->write(json_encode($error));
-      return $response
-        ->withHeader('content-type', 'application/json')
-        ->withStatus(500);
-    }
-   });
+    $response->getBody()->write(var_export($user, true));
+    return $response;
+});
+
+$app->post('/user/new', function (Request $request, Response $response) {
+    $data = $request->getParsedBody();
+    $user_data = [];
+    $user_data['firstname'] = filter_var($data['firstname'], FILTER_SANITIZE_STRING);
+    $user_data['lastname'] = filter_var($data['lastname'], FILTER_SANITIZE_STRING);
+    $user_data['phone'] = filter_var($data['phone'], FILTER_SANITIZE_STRING);
+    $user_data['password'] = filter_var($data['password'], FILTER_SANITIZE_STRING);
+});
+
 $app->run();
