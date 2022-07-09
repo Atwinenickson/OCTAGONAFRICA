@@ -87,7 +87,7 @@ export default {
        })
      
       try {
-        const res = await this.axios.post(`http://localhost:8080/users/1`, {
+        const res = await this.axios.post(`http://localhost:8080/user/1`, {
           phone: this.phone,
           password: this.password
         });
