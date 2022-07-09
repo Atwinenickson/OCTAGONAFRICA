@@ -11,14 +11,13 @@ use Selective\BasePath\BasePathMiddleware;
 require  '../../vendor/autoload.php';
 
 
+$config['displayErrorDetails'] = true;
+$config['addContentLengthHeader'] = false;
+
 
 $app = new \Slim\App(['settings' => $config]);
 $container = $app->getContainer();
 
-
-
-$config['displayErrorDetails'] = true;
-$config['addContentLengthHeader'] = false;
 
 
 $app->get('/users', function (Request $request, Response $response) {
@@ -98,10 +97,10 @@ $app->post('/users/add', function (Request $request, Response $response, array $
     $conn = $db->connect();
    
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':name', $firstname);
-    $stmt->bindParam(':email', $lastname);
+    $stmt->bindParam(':firstname', $firstname);
+    $stmt->bindParam(':lastname', $lastname);
     $stmt->bindParam(':phone', $phone);
-    $stmt->bindParam(':phone', $password);
+    $stmt->bindParam(':password', $password);
  
     $result = $stmt->execute();
  
