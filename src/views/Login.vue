@@ -78,12 +78,13 @@ export default {
   },
   methods: {
     async login(e) {
+       e.preventDefault()
       console.log('logging in')
        console.log({
          "phone":this.phone,
          "password":this.password
        })
-      e.preventDefault()
+     
       try {
         const res = await this.axios.post(`http://localhost:8080/user/login`, {
           phone: this.phone,
