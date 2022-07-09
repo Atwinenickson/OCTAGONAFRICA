@@ -65,9 +65,6 @@
             :disabled="firstname.length < 2 || lastname.length < 2 || password.length < 4 || phone.length < 10">
             SignUp
         </button>
-        <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
-            Forgot Password?
-        </a>
     </form>
     <router-view />
 </template>
