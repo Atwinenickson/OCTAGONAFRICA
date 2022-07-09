@@ -4,6 +4,16 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use Monolog\Logger;
  use Monolog\Handler\StreamHandler;
 
+
+
+namespace App\Application\Controllers;
+
+use classes\UserMapper;
+use PDO;
+use Psr\Log\LoggerInterface;
+
+
+
 require '../vendor/autoload.php';
 
 $config['displayErrorDetails'] = true;
@@ -25,17 +35,9 @@ $container['logger'] = function($c) {
 };
 
 
-$container['logger'] = function($c) {
-    $logger = new \Monolog\Logger('my_logger');
-    $file_handler = new \Monolog\Handler\StreamHandler("../logs/app.log");
-    $logger->pushHandler($file_handler);
-    return $logger;
-};
-
-
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
-    $pdo = new \PDO("sqlite:" .db/phpsqlite.db);
+    $pdo = new PDO('sqlite:/home/atwine/nickson/Work/Vue/octagon/slimbackend/db/users.sqlite3');
     if ($pdo != null)
     echo 'Connected to the SQLite database successfully!';
     else
