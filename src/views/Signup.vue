@@ -1,5 +1,5 @@
 <template>
-
+<!-- Add in the sign up page with it's header -->
     <div class="mb-10">
         <div class="flex justify-center">
             <img alt="" class="h-14 w-14"
@@ -77,6 +77,7 @@ import axios from 'axios';
 
 export default {
     name: "Signup",
+    // create dataobject that binds to the form with v-model
     data() {
         return {
             firstname: "",
@@ -88,6 +89,7 @@ export default {
         };
     },
     methods: {
+        // add users to the database
         async register() {
             try {
                 console.log('clicked')
