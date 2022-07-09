@@ -1,4 +1,5 @@
 <template>
+<!-- Add a login page with tailwind css -->
 
   <div class="mb-10">
     <div class="flex justify-center">
@@ -86,7 +87,7 @@ export default {
        })
      
       try {
-        const res = await this.axios.post(`http://localhost:8080/user/login`, {
+        const res = await this.axios.post(`http://localhost:8080/users/1`, {
           phone: this.phone,
           password: this.password
         });

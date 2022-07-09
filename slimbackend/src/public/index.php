@@ -2,24 +2,45 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+use Slim\Factory\AppFactory;
 
 
 
+// import the sqlite database instance
 use \DB as DB;
+
 use Selective\BasePath\BasePathMiddleware;
 
 require  '../../vendor/autoload.php';
 
 
+// create a global config object for the application
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
+$config['determineRouteBeforeAppMiddleware'] = true;
 
-
+// instatiate the application with the config settings for the app
 $app = new \Slim\App(['settings' => $config]);
-$container = $app->getContainer();
+
+
+// get all routes that need cors settings
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+  return $response;
+});
+
+
+// enable cors on the required methods
+$app->add(function ($req, $res, $next) {
+  $response = $next($req, $res);
+  return $response
+          ->withHeader('Access-Control-Allow-Origin', '*')
+          ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+          ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
 
 
 
+// get all users
 $app->get('/users', function (Request $request, Response $response) {
     $sql = "SELECT * FROM users";
    
@@ -32,8 +53,8 @@ $app->get('/users', function (Request $request, Response $response) {
      
       $response->getBody()->write(json_encode($users));
       return $response
-        ->withHeader('content-type', 'application/json')
-        ->withStatus(200);
+      ->withHeader('content-type', 'application/json')
+      ->withStatus(200);
     } catch (PDOException $e) {
       $error = array(
         "message" => $e->getMessage()
@@ -47,7 +68,7 @@ $app->get('/users', function (Request $request, Response $response) {
    });
 
 
-
+// get a specific user
 $app->get(
     '/users/{id}',
     function (Request $request, Response $response, array $args) 
@@ -82,7 +103,7 @@ $app->get(
 
 
 
-
+// add users to the database
 $app->post('/users/add', function (Request $request, Response $response, array $args) {
   $data = $request->getParsedBody();
   $firstname = $data["firstname"];
@@ -107,8 +128,8 @@ $app->post('/users/add', function (Request $request, Response $response, array $
     $db = null;
     $response->getBody()->write(json_encode($result));
     return $response
-      ->withHeader('content-type', 'application/json')
-      ->withStatus(200);
+    ->withHeader('content-type', 'application/json')
+    ->withStatus(200);
   } catch (PDOException $e) {
     $error = array(
       "message" => $e->getMessage()
@@ -120,5 +141,13 @@ $app->post('/users/add', function (Request $request, Response $response, array $
       ->withStatus(500);
   }
  });
+
+
+// Catch-all route to serve a 404 Not Found page if none of the routes match
+// NOTE: make sure this route is defined last
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) {
+  $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+  return $handler($req, $res);
+});
 
 $app->run();

@@ -15,7 +15,7 @@
         </p>
     </div>
 
-    <form class="mt-8 space-y-6">
+    <form class="mt-8 space-y-6" v-on:submit.prevent="register">
         <div v-if="error" role="alert">
             <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
                 Danger
@@ -61,8 +61,8 @@
         </div>
         <button
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
-            type="submit" v-on:click="register()"
-            :disabled="firstname.length < 6 || lastname.length < 6 || password.length < 6 || phone.length < 10">
+            type="submit"
+            :disabled="firstname.length < 2 || lastname.length < 2 || password.length < 4 || phone.length < 10">
             SignUp
         </button>
         <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name: "Signup",
     data() {
@@ -86,17 +88,16 @@ export default {
         };
     },
     methods: {
-        async register(e) {
+        async register() {
             try {
-                e.preventDefault()
                 console.log('clicked')
-                await this.axios.post(`http://localhost:8080/users/new`, {
+               await axios.post(`http://localhost:8080/users/add`,  {
                     firstname: this.firstname,
                     lastname: this.lastname,
                     phone: this.phone,
                     password: this.password
                 })
-                this.$router.push('/login')
+                this.$router.push('/')
             } catch (e) {
                 console.log('error')
                 this.error = true
