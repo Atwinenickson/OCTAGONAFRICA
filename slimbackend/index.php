@@ -12,8 +12,6 @@ else
 
 $result = $pdo ->query("SELECT * FROM users");
 
-echo $result;
-
 foreach($result as $row)
 {
     print $row['lastname'] . "\n";

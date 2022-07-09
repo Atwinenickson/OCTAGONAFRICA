@@ -3,5 +3,11 @@
         "slim/slim": "3.*",
         "monolog/monolog": "^2.7",
         "robmorgan/phinx": "^0.12.11"
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src/classes/"
+        }
+    
+}
 }
