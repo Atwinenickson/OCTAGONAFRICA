@@ -16,7 +16,7 @@
     </p>
   </div>
 
-  <form class="mt-8 space-y-6">
+  <form class="mt-8 space-y-6" v-on:submit.prevent="login">
     <div v-if="error" role="alert">
       <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
         Danger
@@ -59,7 +59,7 @@
     </div>
     <button
       class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
-      type="submit" v-on:click="login()">
+      type="submit">
       Login In
     </button>
   </form>
@@ -67,6 +67,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+
 export default {
   name: "Login",
   data() {
@@ -87,16 +90,20 @@ export default {
        })
      
       try {
-        const res = await this.axios.post(`http://localhost:8080/user/1`, {
+        const res = await axios.post(`http://localhost:8080/login`, {
           phone: this.phone,
           password: this.password
         });
+
+        console.log(res)
 
         const { jwt, user } = res.data
         window.localStorage.setItem('jwt', jwt)
         window.localStorage.setItem('userData', JSON.stringify(user))
         this.$router.push('/profile')
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.log('error')
         this.error = true
         this.password = ''
