@@ -200,7 +200,7 @@ $app->post('/login', function (Request $request, Response $response, array $args
     $db = new Db();
     $conn = $db->connect();
     $stmt = $conn->query($sql);
-    $users = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $users = reset($stmt->fetchAll(PDO::FETCH_OBJ));
     $db = null;
     $token =  bin2hex(openssl_random_pseudo_bytes(8)); //generate a random token
     $tokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour')); //the expiration date will be in one hour from the current moment
@@ -213,7 +213,7 @@ $app->post('/login', function (Request $request, Response $response, array $args
       -> withHeader('Authorization', 'Bearer ' . $token);
 
     }else{
-      return $this->response->withJson(array("error"=>"User Not Found...Try with right credentials"))
+      return $this->response->json_encode(array("error"=>"User Not Found...Try with right credentials"))
       ->withHeader('content-type', 'application/json')
       ->withStatus(500);
 

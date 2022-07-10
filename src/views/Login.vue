@@ -94,12 +94,8 @@ export default {
           phone: this.phone,
           password: this.password
         });
-
-        console.log(res)
-
-        const { jwt, user } = res.data
-        window.localStorage.setItem('jwt', jwt)
-        window.localStorage.setItem('userData', JSON.stringify(user))
+        window.localStorage.setItem('jwt', res.data.jwt)
+        window.localStorage.setItem('userData', res.data.user)
         this.$router.push('/profile')
       } 
       
