@@ -1,4 +1,11 @@
 {
+    "name": "pyjac/slim-todo",
+    "authors": [
+        {
+            "name": "ATWINE NICKSON",
+            "email": "atwiinenicxon@gmail.com"
+        }
+    ],
     "require": {
         "slim/slim": "3.*",
         "monolog/monolog": "^2.7",
@@ -11,5 +18,14 @@
             "": "src/classes/"
         }
     
-}
+},
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
 }
