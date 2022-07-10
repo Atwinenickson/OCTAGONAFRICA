@@ -204,11 +204,12 @@ $app->post('/login', function (Request $request, Response $response, array $args
     $db = null;
     $token =  bin2hex(openssl_random_pseudo_bytes(8)); //generate a random token
     $tokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour')); //the expiration date will be in one hour from the current moment
+    $loggedinuser = nickson;
 
     // $row_cnt = $users->num_rows;
     if ($users){
       return $this->response->withJson(array("ok"=>"Loggedin Successfully",
-       "token"=> $token, "tokenExpiry"=> $tokenExpiration))
+       "jwt"=> $token, "tokenExpiry"=> $tokenExpiration, "user" =>$loggedinuser))
       ->withHeader('content-type', 'application/json')
       ->withStatus(200)
       -> withHeader('Authorization', 'Bearer ' . $token);
