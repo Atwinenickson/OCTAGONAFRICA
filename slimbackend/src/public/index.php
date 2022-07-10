@@ -17,7 +17,7 @@ use \DB as DB;
 
 use Selective\BasePath\BasePathMiddleware;
 
-require  '../../vendor/autoload.php';
+require  '/home/atwine/nickson/Work/Vue/octagon/slimbackend/vendor/autoload.php';
 
 
 
