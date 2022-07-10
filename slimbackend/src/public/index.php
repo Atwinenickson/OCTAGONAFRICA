@@ -190,26 +190,24 @@ $app->post('/users/add', function (Request $request, Response $response, array $
  // user login functionality. Generate basic random token
 $app->post('/login', function (Request $request, Response $response, array $args) {
   $data = $request->getParsedBody();
+  print($data);
   $phone = $data["phone"];
   $password= $data["password"];
  
-  $sql = "SELECT * FROM  users";
+  $sql = "SELECT * FROM  users WHERE phone = '$phone'";
 
   try {
     $db = new Db();
     $conn = $db->connect();
     $stmt = $conn->query($sql);
-    $stmt->bindParam(':firstname', $firstname);
     $users = $stmt->fetchAll(PDO::FETCH_OBJ);
     $db = null;
     $token =  bin2hex(openssl_random_pseudo_bytes(8)); //generate a random token
     $tokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour')); //the expiration date will be in one hour from the current moment
-    $loggedinuser = nickson;
 
-    // $row_cnt = $users->num_rows;
     if ($users){
       return $this->response->withJson(array("ok"=>"Loggedin Successfully",
-       "jwt"=> $token, "tokenExpiry"=> $tokenExpiration, "user" =>$loggedinuser))
+       "jwt"=> $token, "tokenExpiry"=> $tokenExpiration, "user" =>$users))
       ->withHeader('content-type', 'application/json')
       ->withStatus(200)
       -> withHeader('Authorization', 'Bearer ' . $token);
