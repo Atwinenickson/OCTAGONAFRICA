@@ -66,3 +66,7 @@ cd src
 cd public
 
 Run command php -s localhost 8080
+
+## PHP UNIT TESTS
+cd slimbackend
+./vendor/bin/phpunit ./tests/Functional/indexApiTest.php 

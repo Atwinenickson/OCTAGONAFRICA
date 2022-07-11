@@ -1,5 +1,5 @@
 <template>
-<!-- Add a login page with tailwind css -->
+  <!-- Add a login page with tailwind css -->
 
   <div class="mb-10">
     <div class="flex justify-center">
@@ -22,7 +22,7 @@
         Danger
       </div>
       <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
-        <p>{{ errorMsg }}</p>
+        <p>{{ user.errorMsg }}</p>
       </div>
     </div>
     <div class="-space-y-px">
@@ -31,15 +31,25 @@
           Phone Number</label>
         <input id="identity"
           class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-          type="tel" placeholder="Phone" aria-describedby="phoneHelp" v-model="phone" />
+          type="tel" placeholder="Phone" aria-describedby="phoneHelp" @blur="validate('phone')"
+          @keypress="validate('phone')" v-model="user.phone" />
+            <p 
+                class="errors text-red-700" 
+                v-if="!!errors.phone"
+            >{{errors.phone}}</p>
       </div>
 
       <div class="my-5">
         <label for="identity" class="sr-only">Password</label>
 
-        <input aria-describedby="passwordHelp" v-model="password"
+        <input aria-describedby="passwordHelp" v-model="user.password" @blur="validate('password')"
+          @keypress="validate('password')"
           class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
           id="password" type="password" placeholder="*******" />
+            <p 
+                class="errors text-red-700" 
+                v-if="!!errors.password"
+            >{{errors.password}}</p>
       </div>
     </div>
     <div className="flex items-center justify-between ">
@@ -69,42 +79,77 @@
 <script>
 import axios from 'axios';
 
+import * as Yup from "yup";
+import YupPassword from 'yup-password'
+YupPassword(Yup) // extend yup
+
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const LoginSchema = Yup.object().shape({
+  phone:  Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+  password: Yup.string().password()
+     .min(
+      1,
+      'password must contain 5 or more characters with at least one of each: uppercase, lowercase, number and special'
+    )
+    .minLowercase(1, 'Password must contain at least 1 lower case letter')
+    .minUppercase(1, 'Password must contain at least 1 upper case letter')
+    .minNumbers(1, 'Password must contain at least 1 number')
+    .minSymbols(1, 'Password must contain at least 1 special character')
+     .required("Password is required")
+});
+
+
 
 export default {
   name: "Login",
   data() {
     return {
-      phone: "",
-      password: "",
-      error: false,
-      errorMsg: `An error occurred, please try again`
-    };
+      user: {
+        phone: "",
+        password: "",
+        error: false,
+        errorMsg: `An error occurred, please try again`
+      },
+      errors: {
+        phone: "",
+        password: ""
+      }
+    }
   },
   methods: {
     async login(e) {
-       e.preventDefault()
+      e.preventDefault()
       console.log('logging in')
-       console.log({
-         "phone":this.phone,
-         "password":this.password
-       })
-     
+      console.log({
+        "phone": this.phone,
+        "password": this.password
+      })
+
       try {
+        LoginSchema.validate(this.user, { abortEarly: false })
         const res = await axios.post(`http://localhost:8080/login`, {
-          phone: this.phone,
-          password: this.password
+          phone: this.user.phone,
+          password: this.user.password
         });
         window.localStorage.setItem('jwt', res.data.jwt)
         window.localStorage.setItem('userData', res.data.user)
         this.$router.push('/profile')
-      } 
-      
+      }
+
       catch (error) {
         console.log('error')
         this.error = true
         this.password = ''
       }
     },
+      validate(field) {
+      LoginSchema.validateAt(field, this.user)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
+        });
+    },
+
   },
 };
 </script>
