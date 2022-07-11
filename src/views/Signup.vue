@@ -78,6 +78,19 @@
                 v-if="!!errors.password"
             >{{errors.password}}</p>
             </div>
+
+              <div class="my-16">
+                <label for="identity" class="sr-only">Confirm Password</label>
+
+                <input aria-describedby="passwordHelp"  @blur="validate('passwordConfirmation')"
+          @keypress="validate('passwordConfirmation')" v-model="user.passwordConfirmation"
+                    class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                    id="passwordconfirmation" type="password" placeholder="*******" />
+             <p 
+                class="errors text-red-700" 
+                v-if="!!errors.passwordConfirmation"
+            >{{errors.passwordConfirmation}}</p>
+            </div>
         </div>
         <button
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
@@ -116,7 +129,9 @@ const SignUpSchema = Yup.object().shape({
     .minUppercase(1, 'Password must contain at least 1 upper case letter')
     .minNumbers(1, 'Password must contain at least 1 number')
     .minSymbols(1, 'Password must contain at least 1 special character')
-     .required("Password is required")
+     .required("Password is required"),
+     passwordConfirmation: Yup.string()
+     .oneOf([Yup.ref('password'), null], 'Passwords must match')
 });
 
 export default {
@@ -130,6 +145,7 @@ export default {
             lastname: "",
             phone: "",
             password: "",
+            passwordConfirmation: "",
             error: false,
             errorMsg: `An Error occurred, please try again`
       },
@@ -138,6 +154,7 @@ export default {
             lastname: "",
             phone: "",
             password: "",
+            passwordConfirmation: ""
       }
         }
     },
