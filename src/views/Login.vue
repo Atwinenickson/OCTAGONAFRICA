@@ -121,8 +121,8 @@ export default {
       e.preventDefault()
       console.log('logging in')
       console.log({
-        "phone": this.phone,
-        "password": this.password
+        "phone": this.user.phone,
+        "password": this.user.password
       })
 
       try {

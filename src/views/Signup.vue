@@ -31,16 +31,26 @@
                     First Name</label>
                 <input id="identity"
                     class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-                    type="text" placeholder="First Name" aria-describedby="firstnameHelp" v-model="firstname" />
-            </div>
+                    type="text" placeholder="First Name" aria-describedby="firstnameHelp"  @blur="validate('firstname')"
+          @keypress="validate('firstname')" v-model="user.firstname" />
+            <p 
+                class="errors text-red-700" 
+                v-if="!!errors.firstname"
+            >{{errors.firstname}}</p>
+           </div>
 
             <div class="my-5">
                 <label for="identity" class="sr-only">
                     Last Name</label>
                 <input id="identity"
                     class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-                    type="text" placeholder="Last Name" aria-describedby="lastnameHelp" v-model="lastname" />
-            </div>
+                    type="text" placeholder="Last Name" aria-describedby="lastnameHelp"  @blur="validate('lastname')"
+          @keypress="validate('lastname')" v-model="user.lastname" />
+            <p 
+                class="errors text-red-700" 
+                v-if="!!errors.lastname"
+            >{{errors.lastname}}</p>
+           </div>
 
 
             <div class="my-16">
@@ -48,21 +58,31 @@
                     Phone Number</label>
                 <input id="identity"
                     class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-                    type="tel" placeholder="Phone" aria-describedby="phoneHelp" v-model="phone" />
-            </div>
+                    type="tel" placeholder="Phone" aria-describedby="phoneHelp"  @blur="validate('phone')"
+          @keypress="validate('phone')" v-model="user.phone" />
+            <p 
+                class="errors text-red-700" 
+                v-if="!!errors.phone"
+            >{{errors.phone}}</p>
+           </div>
 
             <div class="my-16">
                 <label for="identity" class="sr-only">Password</label>
 
-                <input aria-describedby="passwordHelp" v-model="password"
+                <input aria-describedby="passwordHelp"  @blur="validate('password')"
+          @keypress="validate('password')" v-model="user.password"
                     class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
                     id="password" type="password" placeholder="*******" />
+             <p 
+                class="errors text-red-700" 
+                v-if="!!errors.password"
+            >{{errors.password}}</p>
             </div>
         </div>
         <button
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
             type="submit"
-            :disabled="firstname.length < 2 || lastname.length < 2 || password.length < 4 || phone.length < 10">
+           >
             SignUp
         </button>
     </form>
@@ -72,24 +92,61 @@
 <script>
 import axios from 'axios';
 
+import * as Yup from "yup";
+import YupPassword from 'yup-password'
+YupPassword(Yup) // extend yup
+
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const SignUpSchema = Yup.object().shape({
+     firstname: Yup.string()
+    .min(3, "First Name should be less than 3 characters")
+    .max(25, "First Name should not exceed 25 characters")
+    .required("First Name is required"),
+  lastname: Yup.string()
+    .min(3, "Last Name should be less than 3 characters")
+    .max(25, "Last Name should not exceed 25 characters")
+    .required("Last Name is required"),
+  phone:  Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+  password: Yup.string().password()
+     .min(
+      1,
+      'password must contain 5 or more characters with at least one of each: uppercase, lowercase, number and special'
+    )
+    .minLowercase(1, 'Password must contain at least 1 lower case letter')
+    .minUppercase(1, 'Password must contain at least 1 upper case letter')
+    .minNumbers(1, 'Password must contain at least 1 number')
+    .minSymbols(1, 'Password must contain at least 1 special character')
+     .required("Password is required")
+});
+
 export default {
     name: "Signup",
     // create dataobject that binds to the form with v-model
     data() {
         return {
-            firstname: "",
+        
+          user: {
+        firstname: "",
             lastname: "",
             phone: "",
             password: "",
             error: false,
             errorMsg: `An Error occurred, please try again`
-        };
+      },
+      errors: {
+        firstname: "",
+            lastname: "",
+            phone: "",
+            password: "",
+      }
+        }
     },
     methods: {
         // add users to the database
         async register() {
             try {
                 console.log('clicked')
+                SignUpSchema.validate(this.user, { abortEarly: false })
                await axios.post(`http://localhost:8080/users/add`,  {
                     firstname: this.firstname,
                     lastname: this.lastname,
@@ -102,7 +159,14 @@ export default {
                 this.error = true
                 this.email = ''
             }
-        }
+        },
+      validate(field) {
+      SignUpSchema.validateAt(field, this.user)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
+        });
+    },
     },
 };
 </script>
