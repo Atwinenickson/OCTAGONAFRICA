@@ -43,7 +43,7 @@
                 <label for="identity" class="sr-only">
                     Last Name</label>
                 <input id="identity"
-                    class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                    class="my-4 rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
                     type="text" placeholder="Last Name" aria-describedby="lastnameHelp"  @blur="validate('lastname')"
           @keypress="validate('lastname')" v-model="user.lastname" />
             <p 
@@ -57,7 +57,7 @@
                 <label for="identity" class="sr-only">
                     Phone Number</label>
                 <input id="identity"
-                    class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                    class="my-4 rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
                     type="tel" placeholder="Phone" aria-describedby="phoneHelp"  @blur="validate('phone')"
           @keypress="validate('phone')" v-model="user.phone" />
             <p 
@@ -71,7 +71,7 @@
 
                 <input aria-describedby="passwordHelp"  @blur="validate('password')"
           @keypress="validate('password')" v-model="user.password"
-                    class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                    class="my-4 rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
                     id="password" type="password" placeholder="*******" />
              <p 
                 class="errors text-red-700" 
@@ -84,7 +84,7 @@
 
                 <input aria-describedby="passwordHelp"  @blur="validate('passwordConfirmation')"
           @keypress="validate('passwordConfirmation')" v-model="user.passwordConfirmation"
-                    class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+                    class="my-4 rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
                     id="passwordconfirmation" type="password" placeholder="*******" />
              <p 
                 class="errors text-red-700" 
