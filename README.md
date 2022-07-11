@@ -1,4 +1,4 @@
-# Octagon
+# Octagon Vue and Slim System
 
 # USER MANUAL – HOW TO LOG IN THE SYSTEM
 
@@ -46,3 +46,23 @@ This button allows the user to submit the registration form. Once the button is 
 **Successful registration**
 
 If all fields have been filled out correctly, the &quot;Sign Up&quot; button is clicked and the system is able to register the new user account, the user will be redirected to the login page to enter the right details.
+
+# HOW TO RUN THE SYSTEM
+
+## FRONTEND
+
+Run command npm install
+
+Then run command npm run dev
+
+## BACKEND
+
+cd slimbackend
+
+Run command compose update
+
+cd src
+
+cd public
+
+Run command php -s localhost 8080
