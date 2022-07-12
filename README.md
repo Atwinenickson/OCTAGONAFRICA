@@ -70,3 +70,47 @@ Run command php -s localhost 8080
 ## PHP UNIT TESTS
 cd slimbackend
 ./vendor/bin/phpunit ./tests/Functional/indexApiTest.php 
+
+## OAUTH2 IMPLEMENTATION
+
+I use two applications. One is Octagon Client and Another one is Administrator.
+
+### Error for Wrong Credentials
+![image info](./pictures/wrongcredentials.png)
+
+### Get token with Right Credentials
+![image info](./pictures/rightcredentials.png)
+
+### Access Users with right token
+![image info](./pictures/users.png)
+
+### Access user with right token
+![image info](./pictures/user.png)
+
+### Signup with right token
+![image info](./pictures/signup.png)
+
+### Login with Right token
+![image info](./pictures/login.png)
+
+### General error for accessing with wrong token
+![image info](./pictures/userserror.png)
+
+### Login Screen
+![image info](./pictures/loginscreen.png)
+
+### Login screen with Errors
+![image info](./pictures/loginerror.png)
+
+### Signup screen
+![image info](./pictures/signupscreen.png)
+
+### Signup screen with Errors
+![image info](./pictures/signuperror.png)
+
+### Profile page
+![image info](./pictures/profile.png)
+
+
+
+
