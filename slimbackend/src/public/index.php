@@ -6,6 +6,10 @@ use Slim\Factory\AppFactory;
 
 
 use Chadicus\Slim\OAuth2\Middleware;
+use Chadicus\Slim\OAuth2\Routes;
+
+use Slim\Http;
+use Slim\Views;
 use OAuth2\Storage;
 use OAuth2\GrantType;
 
@@ -27,13 +31,11 @@ $storage = new Storage\Memory(
       'client_credentials' => [
           'administrator' => [
               'client_id' => 'administrator',
-              'client_secret' => 'password',
-              'scope' => 'superUser',
+              'client_secret' => 'password'
           ],
           'octagon-client' => [
               'client_id' => 'octagon-client',
-              'client_secret' => 'p4ssw0rd',
-              'scope' => 'basicUser',
+              'client_secret' => 'p4ssw0rd'
           ],
       ],
   ]
@@ -47,6 +49,7 @@ $server = new OAuth2\Server(
   ],
   [
       new GrantType\ClientCredentials($storage),
+      new GrantType\AuthorizationCode($storage),
   ]
 );
 
@@ -58,6 +61,13 @@ $config['determineRouteBeforeAppMiddleware'] = true;
 
 // instatiate the basic application with the config settings for the app
 $app = new \Slim\App(['settings' => $config]);
+
+
+$renderer = new Views\PhpRenderer( __DIR__ . '/vendor/chadicus/slim-oauth2-routes/templates');
+
+$app->map(['GET', 'POST'], Routes\Authorize::ROUTE, new Routes\Authorize($server, $renderer))->setName('authorize');
+$app->post(Routes\Token::ROUTE, new Routes\Token($server))->setName('token');
+$app->map(['GET', 'POST'], Routes\ReceiveCode::ROUTE, new Routes\ReceiveCode($renderer))->setName('receive-code');
 
 // create the authorization middlware
 $authMiddleware = new Middleware\Authorization($server, $app->getContainer());
@@ -183,7 +193,7 @@ $app->post('/users/add', function (Request $request, Response $response, array $
       ->withHeader('content-type', 'application/json')
       ->withStatus(500);
   }
- }) ->add($authMiddleware->withRequiredScope(['superUser', ['basicUser']]));
+ }) ->add($authMiddleware);
 
 
 
