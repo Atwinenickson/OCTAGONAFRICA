@@ -59,7 +59,7 @@ Then run command npm run dev
 
 cd slimbackend
 
-Run command compose update
+Run command composer install
 
 cd src
 
