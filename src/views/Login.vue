@@ -33,10 +33,7 @@
           class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
           type="tel" placeholder="Phone" aria-describedby="phoneHelp" @blur="validate('phone')"
           @keypress="validate('phone')" v-model="user.phone" />
-            <p 
-                class="errors text-red-700" 
-                v-if="!!errors.phone"
-            >{{errors.phone}}</p>
+        <p class="errors text-red-700" v-if="!!errors.phone">{{ errors.phone }}</p>
       </div>
 
       <div class="my-5">
@@ -46,10 +43,7 @@
           @keypress="validate('password')"
           class="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
           id="password" type="password" placeholder="*******" />
-            <p 
-                class="errors text-red-700" 
-                v-if="!!errors.password"
-            >{{errors.password}}</p>
+        <p class="errors text-red-700" v-if="!!errors.password">{{ errors.password }}</p>
       </div>
     </div>
     <div className="flex items-center justify-between ">
@@ -85,9 +79,9 @@ YupPassword(Yup) // extend yup
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const LoginSchema = Yup.object().shape({
-  phone:  Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+  phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
   password: Yup.string().password()
-     .min(
+    .min(
       1,
       'password must contain 5 or more characters with at least one of each: uppercase, lowercase, number and special'
     )
@@ -95,7 +89,7 @@ const LoginSchema = Yup.object().shape({
     .minUppercase(1, 'Password must contain at least 1 upper case letter')
     .minNumbers(1, 'Password must contain at least 1 number')
     .minSymbols(1, 'Password must contain at least 1 special character')
-     .required("Password is required")
+    .required("Password is required")
 });
 
 
@@ -125,14 +119,25 @@ export default {
         "password": this.user.password
       })
 
+      //       const config = {
+      //     headers: { Authorization: `Basic ${token}` }
+      // };
+
       try {
         LoginSchema.validate(this.user, { abortEarly: false })
         const res = await axios.post(`http://localhost:8080/login`, {
           phone: this.user.phone,
           password: this.user.password
-        });
+        },
+          // config
+        );
         window.localStorage.setItem('jwt', res.data.jwt)
         window.localStorage.setItem('userData', res.data.user)
+
+        // user = localStorage.getItem('userData')
+        // console.log('user')
+        // console.log(user)
+        // console.log('user')
         this.$router.push('/profile')
       }
 
@@ -142,7 +147,7 @@ export default {
         this.password = ''
       }
     },
-      validate(field) {
+    validate(field) {
       LoginSchema.validateAt(field, this.user)
         .then(() => (this.errors[field] = ""))
         .catch((err) => {

@@ -165,10 +165,10 @@ export default {
                 console.log('clicked')
                 SignUpSchema.validate(this.user, { abortEarly: false })
                await axios.post(`http://localhost:8080/users/add`,  {
-                    firstname: this.firstname,
-                    lastname: this.lastname,
-                    phone: this.phone,
-                    password: this.password
+                    firstname: this.user.firstname,
+                    lastname: this.user.lastname,
+                    phone: this.user.phone,
+                    password: this.user.password
                 })
                 this.$router.push('/')
             } catch (e) {

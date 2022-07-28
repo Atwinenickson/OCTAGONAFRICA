@@ -1,6 +1,7 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+// use \Slim\Http\Response as Response;
 
 use Slim\Factory\AppFactory;
 
@@ -119,7 +120,7 @@ $app->get('/users', function (Request $request, Response $response) {
     }
      //return all users, no scope required
    }) ->add($authMiddleware);
-
+// });
 
 // get a specific user
 $app->get(
@@ -159,10 +160,10 @@ $app->get(
 // add users to the database
 $app->post('/users/add', function (Request $request, Response $response, array $args) {
   $data = $request->getParsedBody();
-  $firstname = $data["firstname"];
-  $lastname = $data["lastname"];
-  $phone = $data["phone"];
-  $password= $data["password"];
+  $firstname = $data['firstname'];
+  $lastname = $data['lastname'];
+  $phone = $data['phone'];
+  $password= $data['password'];
  
   $sql = "INSERT INTO users (firstname, lastname, phone, password) VALUES (:firstname, :lastname, :phone, :password)";
  
@@ -193,16 +194,15 @@ $app->post('/users/add', function (Request $request, Response $response, array $
       ->withHeader('content-type', 'application/json')
       ->withStatus(500);
   }
- }) ->add($authMiddleware);
+ });
 
 
 
  // user login functionality. Generate basic random token
 $app->post('/login', function (Request $request, Response $response, array $args) {
   $data = $request->getParsedBody();
-  print($data);
   $phone = $data["phone"];
-  $password= $data["password"];
+  $userpassword= $data["password"];
  
   $sql = "SELECT * FROM  users WHERE phone = '$phone'";
 
@@ -210,33 +210,42 @@ $app->post('/login', function (Request $request, Response $response, array $args
     $db = new Db();
     $conn = $db->connect();
     $stmt = $conn->query($sql);
-    $users = reset($stmt->fetchAll(PDO::FETCH_OBJ));
+    $users = $stmt->fetchAll(PDO::FETCH_OBJ);
+    // $user = reset($stmt->fetchAll(PDO::FETCH_OBJ));
+    
     $db = null;
-    $token =  bin2hex(openssl_random_pseudo_bytes(8)); //generate a random token
-    $tokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour')); //the expiration date will be in one hour from the current moment
+
+ 
+
+  print_r($users[0] -> id);
 
     if ($users){
-      return $this->response->withJson(array("ok"=>"Loggedin Successfully",
-       "jwt"=> $token, "tokenExpiry"=> $tokenExpiration, "user" =>$users))
-      ->withHeader('content-type', 'application/json')
-      ->withStatus(200)
-      -> withHeader('Authorization', 'Bearer ' . $token);
 
-    }else{
-      return $this->response->json_encode(array("error"=>"User Not Found...Try with right credentials"))
-      ->withHeader('content-type', 'application/json')
-      ->withStatus(500);
+      if ($users[0] -> password === $userpassword){
+        
+        return $this->response->withJson(array("user" =>$users[0]))
+       ->withHeader('content-type', 'application/json')
+       ->withStatus(200);
+       // -> withHeader('Authorization', 'Bearer ' . $token);
+      }
+      else{
+        return $this->response->withJson(array("error"=>"User Not Found...Try with right credentials"))
+        ->withHeader('content-type', 'application/json')
+        ->withStatus(500);
+  
+      }
 
-    }
+    } 
+
   } catch (PDOException $e) {
     $error = array(
       "message" => $e->getMessage()
     );
  
-    $response->getBody()->write(json_encode($error));
-    return $response
-      ->withHeader('content-type', 'application/json')
-      ->withStatus(500);
+    // $response->getBody()->write(json_encode($error));
+    // return $response
+    //   ->withHeader('content-type', 'application/json')
+    //   ->withStatus(500);
   }
  });
 
