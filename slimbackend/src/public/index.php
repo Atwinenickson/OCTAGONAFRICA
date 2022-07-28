@@ -213,7 +213,7 @@ $app->post('/login', function (Request $request, Response $response, array $args
     $users = $stmt->fetchAll(PDO::FETCH_OBJ);
     
     $db = null;
-
+    $responseMessage = 'User Added Successfully';
  
 
   // print_r($users[0] -> password);
@@ -223,14 +223,18 @@ $app->post('/login', function (Request $request, Response $response, array $args
       if ($users[0] -> password === $userpassword){
         
         // return $this->response->withJson(array("user" =>$users[0]))
-        return $this->response->withJson($users[0])
+
+        $responseMessage = json_encode(["success"=>true,"response"=>$responseMessage, "User"=>$users[0]]);
+        $response->getBody()->write($responseMessage);
+        return   $response
        ->withHeader('content-type', 'application/json')
        ->withStatus(200);
        // -> withHeader('Authorization', 'Bearer ' . $token);
       }
       else{
-        
-        return $this->response->withJson(array("error"=>"Wrong password. Try with right password"))
+        $responseMessage = json_encode(["error"=>false,"response"=>"Wrong Password. Please enter a new password"]);
+        $response->getBody()->write($responseMessage);
+        return   $response
         ->withHeader('content-type', 'application/json')
         ->withStatus(401);
   
@@ -239,8 +243,9 @@ $app->post('/login', function (Request $request, Response $response, array $args
     } 
 
     else {
-      $response->withJson(array("error"=>"User Not Found...Try with right phone and password"));
-      return $response
+      $responseMessage = json_encode(["error"=>false,"response"=>"Wrong username and Password. Please enter a new password"]);
+      $response->getBody()->write($responseMessage);
+      return   $response
         ->withHeader('content-type', 'application/json')
         ->withStatus(400);
     }
