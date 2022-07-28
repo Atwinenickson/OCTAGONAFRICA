@@ -15,13 +15,13 @@
         </p>
     </div>
 
-    <form class="mt-8 space-y-6" v-on:submit.prevent="register">
-        <div v-if="error" role="alert">
+    <form class="mt-8 space-y-6" v-on:submit.prevent="register" v-if="!savingSuccessful">
+        <div v-if="savingSuccessful" role="alert">
             <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
-                Danger
+                Success
             </div>
             <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
-                <p>{{ errorMsg }}</p>
+                <p>{{ server_resp }}</p>
             </div>
         </div>
         <div class="-space-y-px">
@@ -146,8 +146,6 @@ export default {
             phone: "",
             password: "",
             passwordConfirmation: "",
-            error: false,
-            errorMsg: `An Error occurred, please try again`
       },
       errors: {
         firstname: "",
@@ -155,21 +153,34 @@ export default {
             phone: "",
             password: "",
             passwordConfirmation: ""
-      }
+      },
+      server_resp: null
         }
     },
     methods: {
         // add users to the database
         async register() {
             try {
-                console.log('clicked')
+                
                 SignUpSchema.validate(this.user, { abortEarly: false })
-               await axios.post(`http://localhost:8080/users/add`,  {
+             const response =   await axios.post(`http://localhost:8080/users/add`,  {
                     firstname: this.user.firstname,
                     lastname: this.user.lastname,
                     phone: this.user.phone,
                     password: this.user.password
                 })
+                console.log('php')
+                console.log(response.data)
+               console.log('php')
+                this.server_resp = response.data
+
+                if (this.server_resp == '') {
+                    this.server_resp = 'User already Exists in the System'
+                }
+                console.log('clicked')
+                console.log(this.server_resp)
+                console.log('clicked')
+
                 this.$router.push('/')
             } catch (e) {
                 console.log('error')

@@ -17,14 +17,28 @@
   </div>
 
   <form class="mt-8 space-y-6" v-on:submit.prevent="login">
-    <div v-if="error" role="alert">
+    <!-- <div v-if="login_error" role="alert">
       <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
         Danger
       </div>
       <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
-        <p>{{ user.errorMsg }}</p>
+        <p>{{login_error }}</p>
       </div>
+    </div> -->
+
+
+  <div v-if="login_error" class="flex bg-white flex-row shadow-md border border-gray-100 rounded-lg overflow-hidden md:w-5/12">
+    <div class="flex w-3 bg-gradient-to-t from-red-500 to-red-400"></div>
+    <div class="flex-1 p-3">
+      <h1 class="md:text-xl text-red-600">Error</h1>
+      <p class="text-red-400 text-xs md:text-sm font-light">{{login_error }}</p>
     </div>
+    <div class="cursor-pointer border-l hover:bg-gray-50 border-gray-100 px-4 flex place-items-center">
+      <p class="text-black text-xs">CLOSE</p>
+    </div>
+  </div>
+
+
     <div class="-space-y-px">
       <div class="my-5">
         <label for="identity" class="sr-only">
@@ -100,14 +114,15 @@ export default {
     return {
       user: {
         phone: "",
-        password: "",
-        error: false,
-        errorMsg: `An error occurred, please try again`
+        password: ""
       },
       errors: {
         phone: "",
         password: ""
-      }
+      },
+
+      login_error : null,
+      login_user : null
     }
   },
   methods: {
@@ -131,14 +146,17 @@ export default {
         },
           // config
         );
-        window.localStorage.setItem('jwt', res.data.jwt)
-        window.localStorage.setItem('userData', res.data.user)
 
-        // user = localStorage.getItem('userData')
-        // console.log('user')
-        // console.log(user)
-        // console.log('user')
-        this.$router.push('/profile')
+        console.log(res)
+        if (res.data.success == true) {
+          this.login_error = res.data?.response
+          localStorage.setItem('User', res.data?.User)
+          this.$router.push('/profile')
+        }
+
+      else {
+         this.login_error = res.data?.response
+      }
       }
 
       catch (error) {
