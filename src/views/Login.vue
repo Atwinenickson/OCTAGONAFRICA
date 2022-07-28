@@ -17,16 +17,6 @@
   </div>
 
   <form class="mt-8 space-y-6" v-on:submit.prevent="login">
-    <!-- <div v-if="login_error" role="alert">
-      <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
-        Danger
-      </div>
-      <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
-        <p>{{login_error }}</p>
-      </div>
-    </div> -->
-
-
   <div v-if="login_error" class="flex bg-white flex-row shadow-md border border-gray-100 rounded-lg overflow-hidden md:w-5/12">
     <div class="flex w-3 bg-gradient-to-t from-red-500 to-red-400"></div>
     <div class="flex-1 p-3">
@@ -122,7 +112,12 @@ export default {
       },
 
       login_error : null,
-      login_user : null
+      login_user : null,
+
+      LoggedIn: {
+        id:'',
+        phone: ''
+      }
     }
   },
   methods: {
@@ -147,10 +142,15 @@ export default {
           // config
         );
 
-        console.log(res)
+        console.log(res.data)
         if (res.data.success == true) {
           this.login_error = res.data?.response
-          localStorage.setItem('User', res.data?.User)
+          
+          // this.LoggedIn = {
+          //   id: res.data?.response.User.id,
+          //   phone: res.data?.response.User.phone
+          // }
+          localStorage.setItem('User', this.LoggedIn)
           this.$router.push('/profile')
         }
 
