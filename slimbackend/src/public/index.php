@@ -211,7 +211,6 @@ $app->post('/login', function (Request $request, Response $response, array $args
     $conn = $db->connect();
     $stmt = $conn->query($sql);
     $users = $stmt->fetchAll(PDO::FETCH_OBJ);
-    // $user = reset($stmt->fetchAll(PDO::FETCH_OBJ));
     
     $db = null;
 
@@ -223,7 +222,8 @@ $app->post('/login', function (Request $request, Response $response, array $args
 
       if ($users[0] -> password === $userpassword){
         
-        return $this->response->withJson(array("user" =>$users[0]))
+        // return $this->response->withJson(array("user" =>$users[0]))
+        return $this->response->withJson($users[0])
        ->withHeader('content-type', 'application/json')
        ->withStatus(200);
        // -> withHeader('Authorization', 'Bearer ' . $token);
