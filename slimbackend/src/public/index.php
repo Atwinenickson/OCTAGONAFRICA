@@ -217,7 +217,7 @@ $app->post('/login', function (Request $request, Response $response, array $args
 
  
 
-  print_r($users[0] -> id);
+  // print_r($users[0] -> password);
 
     if ($users){
 
@@ -229,23 +229,26 @@ $app->post('/login', function (Request $request, Response $response, array $args
        // -> withHeader('Authorization', 'Bearer ' . $token);
       }
       else{
-        return $this->response->withJson(array("error"=>"User Not Found...Try with right credentials"))
+        
+        return $this->response->withJson(array("error"=>"Wrong password. Try with right password"))
         ->withHeader('content-type', 'application/json')
-        ->withStatus(500);
+        ->withStatus(401);
   
       }
 
     } 
 
+    else {
+      $response->withJson(array("error"=>"User Not Found...Try with right phone and password"));
+      return $response
+        ->withHeader('content-type', 'application/json')
+        ->withStatus(400);
+    }
+
   } catch (PDOException $e) {
     $error = array(
       "message" => $e->getMessage()
     );
- 
-    // $response->getBody()->write(json_encode($error));
-    // return $response
-    //   ->withHeader('content-type', 'application/json')
-    //   ->withStatus(500);
   }
  });
 
