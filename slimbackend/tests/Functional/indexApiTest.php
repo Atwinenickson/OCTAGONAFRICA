@@ -24,7 +24,7 @@ class indexApiTest extends BaseTestCase
 
      public function testUsersSignup()
      {
-        $response=$this->runApp('POST', '/users/add');
+        $response=$this->runApp('POST', '/users/add',  ['first_name'=>'Abraomas','last_name'=>'Linkolnas']);
         $this->assertSame($response->getStatusCode(), 401);
         $result = json_decode($response->getBody(), true);
      }
