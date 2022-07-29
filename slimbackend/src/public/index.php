@@ -265,11 +265,11 @@ $app->post('/login', function (Request $request, Response $response, array $args
     } 
 
     else {
-      $responseMessage = json_encode(["error"=>false,"response"=>"Wrong username and Password. Please enter a new password"]);
+      $responseMessage = json_encode(["error"=>false,"response"=>"Wrong username and Password. Please enter the right credentials."]);
       $response->getBody()->write($responseMessage);
       return   $response
         ->withHeader('content-type', 'application/json')
-        ->withStatus(400);
+        ->withStatus(200);
     }
 
   } catch (PDOException $e) {
