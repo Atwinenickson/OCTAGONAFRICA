@@ -168,27 +168,26 @@ $app->post('/users/add', function (Request $request, Response $response, array $
   $sql = "INSERT INTO users (firstname, lastname, phone, password) VALUES (:firstname, :lastname, :phone, :password)";
  
 
-  $db = new Db();
-  $conn = $db->connect();
-  // GET USERS SQL
-  $usersql = "SELECT * FROM users WHERE phone = $phone";
-  $userstmt = $conn->query($usersql);
-  $users = $userstmt->fetchAll(PDO::FETCH_OBJ);
+  // $db = new Db();
+  // $conn = $db->connect();
+  // // GET USERS SQL
+  // $usersql = "SELECT * FROM users WHERE phone = $phone";
+  // $userstmt = $conn->query($usersql);
+  // $users = $userstmt->fetchAll(PDO::FETCH_OBJ);
   // print_r( $users);
   // echo count($users);
   // $count =  $this->$users->where(["phone"=>$phone])->count();
 
-  if(count($users) > 0)
-  {
-    $responseMessage = json_encode(["success"=>false,"response"=>"User Already exists in the system"]);
-    $response->getBody()->write($responseMessage);
-    print_r( $users);
-    return $response
-      ->withHeader('content-type', 'application/json')
-      ->withStatus(400);
-  }
+  // if (count($users) ==50)
+  // {
+  //   $responseMessage = json_encode(["success"=>false,"response"=>"User Already exists in the system"]);
+  //   $response->getBody()->write($responseMessage);
+  //   print_r( $users);
+  //   return $response
+  //     ->withHeader('content-type', 'application/json')
+  //     ->withStatus(200);
+  // }
 
-  else {
     
   try {
     $db = new Db();
@@ -207,12 +206,13 @@ $app->post('/users/add', function (Request $request, Response $response, array $
       ->withHeader('content-type', 'application/json')
       ->withStatus(200);
   } catch (PDOException $e) {
-    $error = array(
-      "message" => $e->getMessage()
-    );
+    $responseMessage = json_encode(["success"=>true,"response"=>"Sorry, Phone already added in the system"]);
+    $response->getBody()->write($responseMessage);
+    return   $response
+      ->withHeader('content-type', 'application/json')
+      ->withStatus(200);
  
    
-  }
   }
 
 
