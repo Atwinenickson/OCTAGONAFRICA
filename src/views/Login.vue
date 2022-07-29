@@ -17,17 +17,28 @@
   </div>
 
   <form class="mt-8 space-y-6" v-on:submit.prevent="login">
-  <div v-if="login_error" class="flex bg-white flex-row shadow-md border border-gray-100 rounded-lg overflow-hidden md:w-5/12">
+  <!-- <div v-if="login_error" class="flex bg-white flex-row shadow-md border border-gray-100 rounded-lg overflow-hidden md:w-5/12">
     <div class="flex w-3 bg-gradient-to-t from-red-500 to-red-400"></div>
     <div class="flex-1 p-3">
       <h1 class="md:text-xl text-red-600">Error</h1>
       <p class="text-red-400 text-xs md:text-sm font-light">{{login_error }}</p>
     </div>
     <div class="cursor-pointer border-l hover:bg-gray-50 border-gray-100 px-4 flex place-items-center">
-      <p class="text-black text-xs">CLOSE</p>
+      <p class="text-black text-xs" v-on:click="closeAlert()">CLOSE</p>
     </div>
-  </div>
+  </div> -->
 
+<div v-if="alertOpen" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500">
+    <span class="text-xl inline-block mr-5 align-middle">
+      <i class="fas fa-bell"></i>
+    </span>
+    <span class="inline-block align-middle mr-8">
+      <b class="capitalize">Hello Client,</b> {{login_error }}
+    </span>
+    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" v-on:click="closeAlert()">
+      <span>×</span>
+    </button>
+  </div>
 
     <div class="-space-y-px">
       <div class="my-5">
@@ -113,6 +124,7 @@ export default {
 
       login_error : null,
       login_user : null,
+      alertOpen: false,
 
       LoggedIn: {
         id:'',
@@ -145,6 +157,7 @@ export default {
         console.log(res.data)
         if (res.data.success == true) {
           this.login_error = res.data?.response
+        
           
           // this.LoggedIn = {
           //   id: res.data?.response.User.id,
@@ -156,6 +169,7 @@ export default {
 
       else {
          this.login_error = res.data?.response
+           this.alertOpen = true
       }
       }
 
@@ -173,6 +187,12 @@ export default {
         });
     },
 
-  },
+       closeAlert: function(){
+    console.log('close')
+    this.alertOpen = false;
+         console.log('close')
+    }
+
+  }
 };
 </script>
