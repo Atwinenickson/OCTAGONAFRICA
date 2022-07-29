@@ -177,11 +177,6 @@ export default {
                     password: this.user.password
                 })
 
-                // this.server_resp = response.data
-                // console.log('clicked')
-                // console.log(this.server_resp)
-                // console.log('clicked')
-
                  if (response.data.success == true) {
           this.server_resp = response.data?.response
            this.$router.push('/')
