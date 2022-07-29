@@ -112,8 +112,8 @@ import axios from 'axios';
 import * as Yup from "yup";
 import YupPassword from 'yup-password'
 YupPassword(Yup) // extend yup
+import "yup-phone-lite";
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const SignUpSchema = Yup.object().shape({
      firstname: Yup.string()
     .min(3, "First Name should be less than 3 characters")
@@ -123,7 +123,9 @@ const SignUpSchema = Yup.object().shape({
     .min(3, "Last Name should be less than 3 characters")
     .max(25, "Last Name should not exceed 25 characters")
     .required("Last Name is required"),
-  phone:  Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+ phone: Yup.string()
+  .phone("UG", "Please enter a valid phone number")
+  .required("A phone number is required"),
   password: Yup.string().password()
      .min(
       1,

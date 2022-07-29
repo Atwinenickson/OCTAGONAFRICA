@@ -15,7 +15,8 @@
     "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.1.0",
     "yup": "^0.32.11",
-    "yup-password": "^0.2.2"
+    "yup-password": "^0.2.2",
+    "yup-phone-lite": "^1.1.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
