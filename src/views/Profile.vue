@@ -79,7 +79,7 @@ export default {
   name: "Profile",
 data() {
     return {
-      user : localStorage.getItem('User')
+      user : JSON.parse(localStorage.getItem('User'))
     }
   }
 }

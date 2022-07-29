@@ -114,6 +114,7 @@ export default {
       login_error : null,
       login_user : null,
       alertOpen: false,
+      active_user: null,
 
       LoggedIn: {
         id:'',
@@ -152,7 +153,10 @@ export default {
           //   id: res.data?.response.User.id,
           //   phone: res.data?.response.User.phone
           // }
-          localStorage.setItem('User', this.LoggedIn)
+          localStorage.setItem('User', JSON.stringify(res.data?.User))
+          // console.log('get')
+          // this.active_user =  localStorage.getItem('User')
+          // console.log(this.active_user);
           this.$router.push('/profile')
         }
 
