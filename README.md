@@ -71,6 +71,12 @@ Run command php -s localhost 8080
 cd slimbackend
 ./vendor/bin/phpunit ./tests/Functional/indexApiTest.php 
 
+## MIGRATION AND USER SEED
+
+php phinx migrate -e octagon
+php vendor/bin/phinx  seed:create UserSeeder
+php vendor/bin/phinx seed:run -e octagon
+
 ## OAUTH2 IMPLEMENTATION
 
 I use two applications. One is Octagon Client and Another one is Administrator.

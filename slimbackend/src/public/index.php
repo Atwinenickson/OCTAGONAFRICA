@@ -95,7 +95,7 @@ $app->add(function ($req, $res, $next) {
 
 // get all users
 $app->get('/users', function (Request $request, Response $response) {
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM user";
    
     try {
       $db = new Db();
@@ -129,7 +129,7 @@ $app->get(
 {
  $id = $request->getAttribute('id');
 
- $sql = "SELECT * FROM  users  WHERE id = $id";
+ $sql = "SELECT * FROM  user  WHERE id = $id";
 
  try {
   $db = new Db();
@@ -165,7 +165,7 @@ $app->post('/users/add', function (Request $request, Response $response, array $
   $phone = $data['phone'];
   $password= $data['password'];
  
-  $sql = "INSERT INTO users (firstname, lastname, phone, password) VALUES (:firstname, :lastname, :phone, :password)";
+  $sql = "INSERT INTO user (firstname, lastname, phone, password) VALUES (:firstname, :lastname, :phone, :password)";
 
     
   try {
@@ -205,7 +205,7 @@ $app->post('/login', function (Request $request, Response $response, array $args
   $phone = $data["phone"];
   $userpassword= $data["password"];
  
-  $sql = "SELECT * FROM  users WHERE phone = '$phone'";
+  $sql = "SELECT * FROM  user WHERE phone = '$phone'";
 
   try {
     $db = new Db();
