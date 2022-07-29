@@ -15,15 +15,19 @@
         </p>
     </div>
 
-    <form class="mt-8 space-y-6" v-on:submit.prevent="register" v-if="!savingSuccessful">
-        <div v-if="savingSuccessful" role="alert">
-            <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
-                Success
-            </div>
-            <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
-                <p>{{ server_resp }}</p>
-            </div>
-        </div>
+    <form class="mt-8 space-y-6" v-on:submit.prevent="register">
+      <div v-if="alertOpen" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500">
+    <span class="text-xl inline-block mr-5 align-middle">
+      <i class="fas fa-bell"></i>
+    </span>
+    <span class="inline-block align-middle mr-8">
+      <b class="capitalize">Hello Client,</b> {{server_resp }}
+    </span>
+    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" v-on:click="closeAlert()">
+      <span>×</span>
+    </button>
+  </div>
+
         <div class="-space-y-px">
 
             <div class="my-5">
@@ -154,7 +158,8 @@ export default {
             password: "",
             passwordConfirmation: ""
       },
-      server_resp: null
+      server_resp: null,
+      alertOpen: false,
         }
     },
     methods: {
@@ -169,23 +174,28 @@ export default {
                     phone: this.user.phone,
                     password: this.user.password
                 })
-                console.log('php')
-                console.log(response.data)
-               console.log('php')
-                this.server_resp = response.data
 
-                if (this.server_resp == '') {
-                    this.server_resp = 'User already Exists in the System'
-                }
-                console.log('clicked')
-                console.log(this.server_resp)
-                console.log('clicked')
+                // this.server_resp = response.data
+                // console.log('clicked')
+                // console.log(this.server_resp)
+                // console.log('clicked')
 
-                this.$router.push('/')
+                 if (response.data.success == true) {
+          this.server_resp = response.data?.response
+           this.$router.push('/')
+        }
+
+      else {
+         this.server_resp = response.data?.response
+           this.alertOpen = true
+      }
+      
+
+               
             } catch (e) {
                 console.log('error')
                 this.error = true
-                this.email = ''
+                this.phone = ''
             }
         },
       validate(field) {
@@ -195,6 +205,9 @@ export default {
           this.errors[err.path] = err.message;
         });
     },
+         closeAlert: function(){
+    this.alertOpen = false;
+    }
     },
 };
 </script>

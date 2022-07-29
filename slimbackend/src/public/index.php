@@ -185,7 +185,7 @@ $app->post('/users/add', function (Request $request, Response $response, array $
       ->withHeader('content-type', 'application/json')
       ->withStatus(200);
   } catch (PDOException $e) {
-    $responseMessage = json_encode(["success"=>true,"response"=>"Sorry, Phone already added in the system"]);
+    $responseMessage = json_encode(["success"=>false,"response"=>"Sorry, User with phone already exists in the system"]);
     $response->getBody()->write($responseMessage);
     return   $response
       ->withHeader('content-type', 'application/json')
