@@ -25,24 +25,9 @@ use Selective\BasePath\BasePathMiddleware;
 require  '/home/atwine/nickson/Work/Vue/octagon/slimbackend/vendor/autoload.php';
 
 
+$pdo = new \PDO('sqlite:' . __DIR__ . '/slim_oauth2.db');
+$storage = new Storage\Pdo($pdo);
 
-//set up storage for oauth2 server
-$storage = new Storage\Memory(
-  [
-      'client_credentials' => [
-          'administrator' => [
-              'client_id' => 'administrator',
-              'client_secret' => 'password'
-          ],
-          'octagon-client' => [
-              'client_id' => 'octagon-client',
-              'client_secret' => 'p4ssw0rd'
-          ],
-      ],
-  ]
-);
-
-// create the oauth2 server
 $server = new OAuth2\Server(
   $storage,
   [
@@ -54,24 +39,18 @@ $server = new OAuth2\Server(
   ]
 );
 
-
-// create a global config object for the application
-$config['displayErrorDetails'] = true;
-$config['addContentLengthHeader'] = false;
-$config['determineRouteBeforeAppMiddleware'] = true;
-
-// instatiate the basic application with the config settings for the app
-$app = new \Slim\App(['settings' => $config]);
-
+$app = new Slim\App([]);
 
 $renderer = new Views\PhpRenderer( __DIR__ . '/vendor/chadicus/slim-oauth2-routes/templates');
+
 
 $app->map(['GET', 'POST'], Routes\Authorize::ROUTE, new Routes\Authorize($server, $renderer))->setName('authorize');
 $app->post(Routes\Token::ROUTE, new Routes\Token($server))->setName('token');
 $app->map(['GET', 'POST'], Routes\ReceiveCode::ROUTE, new Routes\ReceiveCode($renderer))->setName('receive-code');
 
-// create the authorization middlware
-$authMiddleware = new Middleware\Authorization($server, $app->getContainer());
+$authorization = new Middleware\Authorization($server, $app->getContainer());
+
+
 
 
 // get all routes that need cors settings
@@ -119,8 +98,7 @@ $app->get('/users', function (Request $request, Response $response) {
         ->withStatus(500);
     }
      //return all users, no scope required
-   }) ->add($authMiddleware);
-// });
+   }) ->add($authorization);
 
 // get a specific user
 $app->get(
