@@ -4,7 +4,7 @@
   <div class="mb-10">
     <div class="flex justify-center">
       <img alt="" class="h-14 w-14"
-        src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-Oy7Jl2PYVr4xWvuB0GiB6ybMuK8FdcLnDwuuDuv7oDyYS__U" />
+        src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c4e4.png" />
     </div>
     <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
       Login to your account

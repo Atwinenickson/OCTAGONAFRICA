@@ -116,11 +116,11 @@ import "yup-phone-lite";
 
 const SignUpSchema = Yup.object().shape({
      firstname: Yup.string()
-    .min(3, "First Name should be less than 3 characters")
+    .min(3, "First Name should be not be less than 3 characters")
     .max(25, "First Name should not exceed 25 characters")
     .required("First Name is required"),
   lastname: Yup.string()
-    .min(3, "Last Name should be less than 3 characters")
+    .min(3, "Last Name should not be less than 3 characters")
     .max(25, "Last Name should not exceed 25 characters")
     .required("Last Name is required"),
  phone: Yup.string()
