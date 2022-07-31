@@ -16,7 +16,7 @@
     </p>
   </div>
 
-  <form class="mt-8 space-y-6" v-on:submit.prevent="login">
+  <form class="mt-8 space-y-6" v-on:submit.prevent="login"  @submit="checkForm">
 <div v-if="alertOpen" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500">
     <span class="text-xl inline-block mr-5 align-middle">
       <i class="fas fa-bell"></i>
@@ -28,6 +28,28 @@
       <span>×</span>
     </button>
   </div>
+
+
+    <div v-if="validate_errors.length" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-fuchsia-500">
+    <span class="text-xl inline-block mr-5 align-middle">
+      <i class="fas fa-bell"></i>
+    </span>
+    <span v-if="validate_errors.length" class="inline-block align-middle mr-8">
+      <ul>
+      <li v-for="error in validate_errors">{{ error }}</li>
+    </ul>
+    </span>
+    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" v-on:click="closeMissingValueAlert()">
+      <span>×</span>
+    </button>
+  </div>
+
+    <!-- <p v-if="validate_errors.length">
+    <b>Please correct the following error(s):</b>
+    <ul>
+      <li v-for="error in validate_errors">{{ error }}</li>
+    </ul>
+  </p> -->
 
     <div class="-space-y-px">
       <div class="my-5">
@@ -80,10 +102,12 @@ import axios from 'axios';
 import * as Yup from "yup";
 import YupPassword from 'yup-password'
 YupPassword(Yup) // extend yup
+import "yup-phone-lite";
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const LoginSchema = Yup.object().shape({
-  phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+phone: Yup.string()
+  .phone("UG", "Please enter a valid phone number")
+  .required("A phone number is required"),
   password: Yup.string().password()
     .min(
       1,
@@ -103,8 +127,8 @@ export default {
   data() {
     return {
       user: {
-        phone: "",
-        password: ""
+        phone: null,
+        password: null
       },
       errors: {
         phone: "",
@@ -115,6 +139,7 @@ export default {
       login_user : null,
       alertOpen: false,
       active_user: null,
+       validate_errors: [],
 
       LoggedIn: {
         id:'',
@@ -137,33 +162,26 @@ export default {
 
       try {
         LoginSchema.validate(this.user, { abortEarly: false })
+   
         const res = await axios.post(`http://localhost:8080/login`, {
           phone: this.user.phone,
           password: this.user.password
         },
           // config
         );
+        
 
         console.log(res.data)
         if (res.data.success == true) {
           this.login_error = res.data?.response
-        
-          
-          // this.LoggedIn = {
-          //   id: res.data?.response.User.id,
-          //   phone: res.data?.response.User.phone
-          // }
           localStorage.setItem('User', JSON.stringify(res.data?.User))
-          // console.log('get')
-          // this.active_user =  localStorage.getItem('User')
-          // console.log(this.active_user);
           this.$router.push('/profile')
         }
 
       else {
          this.login_error = res.data?.response
            this.alertOpen = true
-      }
+      } 
       }
 
       catch (error) {
@@ -184,7 +202,30 @@ export default {
     console.log('close')
     this.alertOpen = false;
          console.log('close')
-    }
+    },
+
+        closeMissingValueAlert: function(){
+    console.log('close')
+    this.validate_errors.length = [];
+         console.log('close')
+    },
+
+        checkForm: function (e) {
+          console.log('errors are here')
+      this.validate_errors = [];
+
+      if (!this.user.phone) {
+        this.validate_errors.push("Phone is required.");
+      }
+      if (!this.user.password) {
+        this.validate_errors.push('Password required.');
+      }
+      if (!this.validate_errors.length) {
+        return true;
+      }
+
+      e.preventDefault();
+    },
 
   }
 };

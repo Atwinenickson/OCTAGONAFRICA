@@ -86,7 +86,7 @@ I use two applications. One is Octagon Client and Another one is Employee.
 php -S localhost:8080
 
 ### GET BEARER TOKEN
-curl -H 'Authorization: Bearer e2b065792a1b8X POST -d client_id=octagon -d client_secret=secret -d grant_type=client_credentials http://localhost:8080/token
+curl -X POST -d client_id=octagon -d client_secret=secret -d grant_type=client_credentials http://localhost:8080/token
 
 ### GET USERS
 curl -H 'Authorization: Bearer e2b065792a1b808babc8430143b1cf1e3129c6b6' http://localhost:8080/users
