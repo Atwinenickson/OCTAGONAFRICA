@@ -3,7 +3,8 @@
 
   <div class="mb-10">
     <div class="flex justify-center">
-      <img alt="" class="h-14 w-14" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-Oy7Jl2PYVr4xWvuB0GiB6ybMuK8FdcLnDwuuDuv7oDyYS__U" />
+      <img alt="" class="h-14 w-14"
+        src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-Oy7Jl2PYVr4xWvuB0GiB6ybMuK8FdcLnDwuuDuv7oDyYS__U" />
     </div>
     <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
       Login to your account
@@ -180,8 +181,8 @@ export default {
           this.login_error = res.data?.response
           this.alertOpen = true
         }
-        }
-      
+      }
+
       catch (error) {
         console.log('error')
         this.error = true

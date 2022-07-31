@@ -17,9 +17,9 @@
       </div>
       <div class="">
         <div class="px-7 mb-8">
-          <h2 class="text-xl font-bold text-green-800 dark:text-gray-300">{{user.firstname}} {{user.lastname}}</h2>
+          <h2 class="text-xl font-bold text-green-800 dark:text-gray-300">{{user?.firstname}} {{user?.lastname}}</h2>
           <p class="text-gray-400 mt-2 dark:text-gray-400">Software Engineer</p>
-          <p class="mt-2 text-gray-600 dark:text-gray-300"> {{user.phone}}</p>
+          <p class="mt-2 text-gray-600 dark:text-gray-300"> {{user?.phone}}</p>
           <div
             class="h-20 justify-center px-4 py-2 cursor-pointer bg-green-900 max-w mx-auto mt-8 rounded-lg text-gray-300 hover:bg-green-800 hover:text-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-gray-200">
            <h1 class="align-center mt-4">Octagon Simple Application</h1>
@@ -66,7 +66,7 @@
           </div>
         </div>
       </div>
-      <button class="m-24 relative block px-8 bg-purple-200 py-3 border border-current">
+      <button  v-on:click="logout()" class="m-24 relative block px-8 bg-purple-200 py-3 border border-current">
         <router-link to="/">LogOut</router-link>
       </button>
     </div>
@@ -81,6 +81,12 @@ data() {
     return {
       user : JSON.parse(localStorage.getItem('User'))
     }
+  },
+
+  methods: {
+     logout: function(){
+    localStorage.removeItem('User')
+    },
   }
 }
 </script>
