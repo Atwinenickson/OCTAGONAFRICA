@@ -3,8 +3,7 @@
 
   <div class="mb-10">
     <div class="flex justify-center">
-      <img alt="" class="h-14 w-14"
-        src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c4e4.png" />
+      <img alt="" class="h-14 w-14" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-Oy7Jl2PYVr4xWvuB0GiB6ybMuK8FdcLnDwuuDuv7oDyYS__U" />
     </div>
     <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
       Login to your account
@@ -16,40 +15,37 @@
     </p>
   </div>
 
-  <form class="mt-8 space-y-6" v-on:submit.prevent="login"  @submit="checkForm">
-<div v-if="alertOpen" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500">
-    <span class="text-xl inline-block mr-5 align-middle">
-      <i class="fas fa-bell"></i>
-    </span>
-    <span class="inline-block align-middle mr-8">
-      <b class="capitalize">Hello Client,</b> {{login_error }}
-    </span>
-    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" v-on:click="closeAlert()">
-      <span>×</span>
-    </button>
-  </div>
+  <form class="mt-8 space-y-6" v-on:submit.prevent="login" @submit="checkForm">
+    <div v-if="alertOpen" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500">
+      <span class="text-xl inline-block mr-5 align-middle">
+        <i class="fas fa-bell"></i>
+      </span>
+      <span class="inline-block align-middle mr-8">
+        <b class="capitalize">Hello Client,</b> {{ login_error }}
+      </span>
+      <button
+        class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none"
+        v-on:click="closeAlert()">
+        <span>×</span>
+      </button>
+    </div>
 
 
     <div v-if="validate_errors.length" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-fuchsia-500">
-    <span class="text-xl inline-block mr-5 align-middle">
-      <i class="fas fa-bell"></i>
-    </span>
-    <span v-if="validate_errors.length" class="inline-block align-middle mr-8">
-      <ul>
-      <li v-for="error in validate_errors">{{ error }}</li>
-    </ul>
-    </span>
-    <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" v-on:click="closeMissingValueAlert()">
-      <span>×</span>
-    </button>
-  </div>
-
-    <!-- <p v-if="validate_errors.length">
-    <b>Please correct the following error(s):</b>
-    <ul>
-      <li v-for="error in validate_errors">{{ error }}</li>
-    </ul>
-  </p> -->
+      <span class="text-xl inline-block mr-5 align-middle">
+        <i class="fas fa-bell"></i>
+      </span>
+      <span v-if="validate_errors.length" class="inline-block align-middle mr-8">
+        <ul>
+          <li v-for="error in validate_errors">{{ error }}</li>
+        </ul>
+      </span>
+      <button
+        class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none"
+        v-on:click="closeMissingValueAlert()">
+        <span>×</span>
+      </button>
+    </div>
 
     <div class="-space-y-px">
       <div class="my-5">
@@ -105,9 +101,9 @@ YupPassword(Yup) // extend yup
 import "yup-phone-lite";
 
 const LoginSchema = Yup.object().shape({
-phone: Yup.string()
-  .phone("UG", "Please enter a valid phone number")
-  .required("A phone number is required"),
+  phone: Yup.string()
+    .phone("UG", "Please enter a valid phone number")
+    .required("A phone number is required"),
   password: Yup.string().password()
     .min(
       1,
@@ -135,14 +131,14 @@ export default {
         password: ""
       },
 
-      login_error : null,
-      login_user : null,
+      login_error: null,
+      login_user: null,
       alertOpen: false,
       active_user: null,
-       validate_errors: [],
+      validate_errors: [],
 
       LoggedIn: {
-        id:'',
+        id: '',
         phone: ''
       }
     }
@@ -162,28 +158,30 @@ export default {
 
       try {
         LoginSchema.validate(this.user, { abortEarly: false })
-   
+
+
         const res = await axios.post(`http://localhost:8080/login`, {
           phone: this.user.phone,
           password: this.user.password
         },
           // config
         );
-        
+
 
         console.log(res.data)
+
         if (res.data.success == true) {
           this.login_error = res.data?.response
           localStorage.setItem('User', JSON.stringify(res.data?.User))
           this.$router.push('/profile')
         }
 
-      else {
-         this.login_error = res.data?.response
-           this.alertOpen = true
-      } 
-      }
-
+        else {
+          this.login_error = res.data?.response
+          this.alertOpen = true
+        }
+        }
+      
       catch (error) {
         console.log('error')
         this.error = true
@@ -198,20 +196,20 @@ export default {
         });
     },
 
-       closeAlert: function(){
-    console.log('close')
-    this.alertOpen = false;
-         console.log('close')
+    closeAlert: function () {
+      console.log('close')
+      this.alertOpen = false;
+      console.log('close')
     },
 
-        closeMissingValueAlert: function(){
-    console.log('close')
-    this.validate_errors.length = [];
-         console.log('close')
+    closeMissingValueAlert: function () {
+      console.log('close')
+      this.validate_errors.length = [];
+      console.log('close')
     },
 
-        checkForm: function (e) {
-          console.log('errors are here')
+    checkForm: function (e) {
+      console.log('errors are here')
       this.validate_errors = [];
 
       if (!this.user.phone) {

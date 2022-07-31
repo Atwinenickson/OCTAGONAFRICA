@@ -15,7 +15,7 @@
         </p>
     </div>
 
-    <form class="mt-8 space-y-6" v-on:submit.prevent="register">
+    <form class="mt-8 space-y-6" v-on:submit.prevent="register" @submit="checkForm">
       <div v-if="alertOpen" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500">
     <span class="text-xl inline-block mr-5 align-middle">
       <i class="fas fa-bell"></i>
@@ -27,6 +27,22 @@
       <span>×</span>
     </button>
   </div>
+
+      <div v-if="validate_errors.length" class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-fuchsia-500">
+      <span class="text-xl inline-block mr-5 align-middle">
+        <i class="fas fa-bell"></i>
+      </span>
+      <span v-if="validate_errors.length" class="inline-block align-middle mr-8">
+        <ul>
+          <li v-for="error in validate_errors">{{ error }}</li>
+        </ul>
+      </span>
+      <button
+        class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none"
+        v-on:click="closeMissingValueAlert()">
+        <span>×</span>
+      </button>
+    </div>
 
         <div class="-space-y-px">
 
@@ -147,11 +163,11 @@ export default {
         return {
         
           user: {
-        firstname: "",
-            lastname: "",
-            phone: "",
-            password: "",
-            passwordConfirmation: "",
+        firstname: null,
+            lastname: null,
+            phone: null,
+            password: null,
+            passwordConfirmation: null,
       },
       errors: {
         firstname: "",
@@ -162,6 +178,7 @@ export default {
       },
       server_resp: null,
       alertOpen: false,
+      validate_errors: [],
         }
     },
     methods: {
@@ -204,7 +221,39 @@ export default {
     },
          closeAlert: function(){
     this.alertOpen = false;
-    }
+    },
+     closeMissingValueAlert: function () {
+      console.log('close')
+      this.validate_errors.length = [];
+      console.log('close')
+    },
+ checkForm: function (e) {
+          console.log('errors are here')
+      this.validate_errors = [];
+
+
+      if (!this.user.firstname) {
+        this.validate_errors.push("First Name is required.");
+      }
+
+
+      if (!this.user.lastname) {
+        this.validate_errors.push("Last Name is required.");
+      }
+
+      if (!this.user.phone) {
+        this.validate_errors.push("Phone is required.");
+      }
+      if (!this.user.password) {
+        this.validate_errors.push('Password required.');
+      }
+      if (!this.validate_errors.length) {
+        return true;
+      }
+
+      e.preventDefault();
+    },
+
     },
 };
 </script>
