@@ -142,6 +142,7 @@ $app->post('/users/add', function (Request $request, Response $response, array $
   $lastname = $data['lastname'];
   $phone = $data['phone'];
   $password= $data['password'];
+  $password = password_hash($password, PASSWORD_DEFAULT);
  
   $sql = "INSERT INTO user (firstname, lastname, phone, password) VALUES (:firstname, :lastname, :phone, :password)";
 
@@ -193,13 +194,15 @@ $app->post('/login', function (Request $request, Response $response, array $args
     
     $db = null;
     $responseMessage = 'User Added Successfully';
+
+    // $hashed = password_verify($userpassword, $users[0] -> password);
  
 
   // print_r($users[0] -> password);
 
     if ($users){
 
-      if ($users[0] -> password === $userpassword){
+      if (password_verify($userpassword, $users[0] -> password)){
         
         // return $this->response->withJson(array("user" =>$users[0]))
 
